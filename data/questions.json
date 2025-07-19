@@ -1,0 +1,77 @@
+[
+  {
+    "id": 1,
+    "question": "Préférez-vous dominer ou être dominé ?",
+    "options": ["Dominer", "Être dominé", "Les deux"]
+  },
+  {
+    "id": 2,
+    "question": "Quel type de préliminaires préférez-vous ?",
+    "options": ["Oral", "Caresses", "Massages"]
+  },
+  {
+    "id": 3,
+    "question": "Quel est votre lieu préféré pour faire l'amour ?",
+    "options": ["Lit", "Douche", "Endroit insolite"]
+  },
+  {
+    "id": 4,
+    "question": "Quelle fréquence vous convient le mieux ?",
+    "options": ["Tous les jours", "2-3 fois/semaine", "Occasionnellement"]
+  },
+  {
+    "id": 5,
+    "question": "Quel est votre niveau de curiosité pour les jeux sexy ?",
+    "options": ["Très curieux", "Un peu", "Pas du tout"]
+  },
+  {
+    "id": 6,
+    "question": "Aimez-vous utiliser des accessoires pendant vos moments intimes ?",
+    "options": ["Oui, souvent", "Parfois", "Jamais"]
+  },
+  {
+    "id": 7,
+    "question": "Quel est votre niveau de confort avec les massages érotiques ?",
+    "options": ["J'adore", "Ça me tente", "Pas pour moi"]
+  },
+  {
+    "id": 8,
+    "question": "Préférez-vous des caresses douces ou plus fermes ?",
+    "options": ["Douces", "Fermes", "Un mélange des deux"]
+  },
+  {
+    "id": 9,
+    "question": "Avez-vous déjà essayé les jeux de rôle ?",
+    "options": ["Oui, régulièrement", "Juste une fois", "Jamais"]
+  },
+  {
+    "id": 10,
+    "question": "Quel est votre rapport avec les fantasmes ?",
+    "options": ["J'aime les partager", "Je les garde secrets", "Je n’en ai pas"]
+  },
+  {
+    "id": 11,
+    "question": "Êtes-vous à l’aise avec les petites contraintes (menottes, bandeau) ?",
+    "options": ["Oui, totalement", "Ça dépend", "Non, pas du tout"]
+  },
+  {
+    "id": 12,
+    "question": "Quelle place accordez-vous aux surprises osées ?",
+    "options": ["J'adore", "Je suis prudemment ouvert(e)", "Je préfère éviter"]
+  },
+  {
+    "id": 13,
+    "question": "Aimez-vous expérimenter des positions audacieuses ?",
+    "options": ["Oui, toujours", "Parfois", "Jamais"]
+  },
+  {
+    "id": 14,
+    "question": "Êtes-vous prêt(e) à tester des accessoires plus avancés ?",
+    "options": ["Oui, très excité(e)", "Un peu hésitant(e)", "Non merci"]
+  },
+  {
+    "id": 15,
+    "question": "Jusqu’où êtes-vous prêt(e) à aller dans vos jeux intimes ?",
+    "options": ["Très loin, sans tabou", "Dans certaines limites", "Plutôt soft"]
+  }
+]

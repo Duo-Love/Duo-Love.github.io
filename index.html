@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DuoLove</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Page d'accueil : introduction et bouton pour démarrer -->
+  <div id="accueil" class="page">
+    <h1>Bienvenue sur DuoLove ❤️</h1>
+    <p>Un jeu sexy pour couples : apprenez, découvrez, jouez ensemble.</p>
+    <button onclick="afficher('menu')">GO</button>
+  </div>
+
+  <!-- Menu principal : choix entre différentes catégories du jeu -->
+  <div id="menu" class="page" style="display:none;">
+    <h2>Choisissez une catégorie</h2>
+    <button onclick="afficher('questionnaire')">📝 Questionnaire Couple</button>
+    <button onclick="afficher('roulette')">🎡 Roulette Sexy</button>
+    <button onclick="afficher('action-verite')">🔥 Action / Vérité</button>
+  </div>
+
+  <!-- Page Questionnaire -->
+  <div id="questionnaire" class="page" style="display:none;">
+    <h2 id="titre-phase"></h2>
+	<div id="message-transition" style="color:#2196f3; font-weight:bold; margin-bottom:10px;"></div>
+    <div id="questions-container"></div>
+  </div>
+
+  <!-- Page Résultat -->
+  <div id="resultat" class="page" style="display:none;">
+    <!-- Les résultats seront générés et affichés ici via JavaScript -->
+  </div>
+
+  <!-- Page Roulette Sexy -->
+  <div id="roulette" class="page" style="display:none;">
+    <canvas id="wheel" width="500" height="500"></canvas>
+    <button id="spin">Tourner la roue</button>
+	<div id="roulette-resultat" class="defi-box"></div>
+
+  </div>
+
+
+
+  <!-- Page Action ou Vérité -->
+  <div id="action-verite" class="page" style="display:none;">
+    <h2>Action ou Vérité</h2>
+    <p>À venir...</p>
+  </div>
+
+  <!-- Script principal -->
+  <script src="script.js"></script>
+</body>
+</html>
