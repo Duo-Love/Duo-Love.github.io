@@ -129,17 +129,10 @@ button {
   left: 100%;
 }
 
-#accueil button:hover {
-  background: linear-gradient(135deg, #ff8fab, #d63384);
-  box-shadow: 0 0 30px #ff6b9d, 0 0 60px rgba(255, 107, 157, 0.4);
-  transform: translateY(-2px) scale(1.08);
-}
+/* Supprimé pour optimisation mobile */
 
 /* Hover général sur les boutons */
-button:hover {
-  box-shadow: 0 0 25px #f48fb1;
-  transform: translateY(-2px) scale(1.05);
-}
+/* Supprimé pour optimisation mobile */
 
 /* Espacement vertical des boutons dans le menu */
 #menu button {
@@ -232,11 +225,7 @@ button:hover {
   box-shadow: 0 0 10px #2196f3;
 }
 
-#questionnaire.homme .reponse-btn:hover {
-  background-color: #1976d2;
-  box-shadow: 0 0 25px #1976d2;
-  transform: translateY(-2px) scale(1.03);
-}
+/* Supprimé pour optimisation mobile */
 
 /* Conteneur des questions avec transition */
 #questions-container {

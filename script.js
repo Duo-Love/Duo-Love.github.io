@@ -11,7 +11,9 @@ const audio = {
   clicks: [
     new Audio('sons/click1.wav'),
     new Audio('sons/click2.wav'),
-    new Audio('sons/click3.wav')
+    new Audio('sons/click3.wav'),
+    new Audio('sons/click4.wav'),
+    new Audio('sons/click5.wav')
   ]
 };
 
@@ -82,7 +84,7 @@ function transitionAccueilVersMenu() {
 /**
  * Affiche la page questionnaire avec configuration appropriée
  */
-function afficherPageQuestionnaire() {
+async function afficherPageQuestionnaire() {
   masquerToutesLesPages();
   document.getElementById('questionnaire').style.display = "block";
   
@@ -90,7 +92,7 @@ function afficherPageQuestionnaire() {
   const questionnaireDiv = document.getElementById('questionnaire');
   questionnaireDiv.className = phase; // 'femme' ou 'homme'
   
-  chargerQuestions();
+  await chargerQuestions();
 }
 
 /**
@@ -124,24 +126,18 @@ function masquerToutesLesPages() {
 /**
  * Charge et initialise les questions du questionnaire
  */
-function chargerQuestions() {
-  questions = [
-    { "id": 1, "question": "Préférez-vous dominer ou être dominé ?", "options": ["Dominer", "Être dominé", "Les deux"] },
-    { "id": 2, "question": "Quel type de préliminaires préférez-vous ?", "options": ["Oral", "Caresses", "Massages"] },
-    { "id": 3, "question": "Quel est votre lieu préféré pour faire l'amour ?", "options": ["Lit", "Douche", "Endroit insolite"] },
-    { "id": 4, "question": "Quelle fréquence vous convient le mieux ?", "options": ["Tous les jours", "2-3 fois/semaine", "Occasionnellement"] },
-    { "id": 5, "question": "Quel est votre niveau de curiosité pour les jeux sexy ?", "options": ["Très curieux", "Un peu", "Pas du tout"] },
-    { "id": 6, "question": "Aimez-vous les surprises coquines ?", "options": ["Oui, toujours", "Parfois", "Non, pas trop"] },
-    { "id": 7, "question": "Quelle est votre position favorite ?", "options": ["Missionnaire", "Derrière", "Autre"] },
-    { "id": 8, "question": "Avez-vous déjà utilisé des accessoires ?", "options": ["Oui souvent", "Parfois", "Jamais"] },
-    { "id": 9, "question": "Que pensez-vous des jeux de rôle ?", "options": ["J'adore", "Curieux(se) d'essayer", "Pas mon truc"] },
-    { "id": 10, "question": "Aimez-vous l'idée d'un lieu public ?", "options": ["Oui, excitant", "Seulement très discret", "Jamais"] },
-    { "id": 11, "question": "Quelle intensité préférez-vous ?", "options": ["Douce", "Modérée", "Intense"] },
-    { "id": 12, "question": "Vous sentez-vous à l'aise avec les jeux de domination ?", "options": ["Oui", "À essayer", "Non"] },
-    { "id": 13, "question": "Jouez-vous avec des limites ?", "options": ["Oui, clairement définies", "Parfois", "Non"] },
-    { "id": 14, "question": "Quelle durée préférez-vous pour un moment intime ?", "options": ["Long", "Moyen", "Court"] },
-    { "id": 15, "question": "Jusqu'où êtes-vous prêt(e) à aller dans vos jeux intimes ?", "options": ["Très loin, sans tabou", "Dans certaines limites", "Plutôt soft"] }
-  ];
+async function chargerQuestions() {
+  try {
+    const response = await fetch('data/questions.json');
+    questions = await response.json();
+  } catch (error) {
+    console.error('Erreur lors du chargement des questions:', error);
+    // Questions de fallback en cas d'erreur
+    questions = [
+      { "id": 1, "question": "Préférez-vous dominer ou être dominé ?", "options": ["Dominer", "Être dominé", "Les deux"] },
+      { "id": 2, "question": "Quel type de préliminaires préférez-vous ?", "options": ["Oral", "Caresses", "Massages"] }
+    ];
+  }
 
   currentQuestionIndex = 0;
   if (phase === 'femme') {
@@ -334,8 +330,16 @@ function calculerCompatibilite() {
  * Génère le tableau HTML des résultats
  */
 function genererTableauResultats() {
-  let tableau = `<table border="1" cellpadding="5" cellspacing="0">
-    <tr><th>Question</th><th>Réponse Partenaire 1</th><th>Réponse Partenaire 2</th></tr>`;
+  let tableau = `<div class="tableau-container">
+    <table class="tableau-mobile">
+      <thead>
+        <tr>
+          <th>Question</th>
+          <th>Partenaire 1</th>
+          <th>Partenaire 2</th>
+        </tr>
+      </thead>
+      <tbody>`;
 
   for (let i = 0; i < questions.length; i++) {
     const question = questions[i];
@@ -343,14 +347,18 @@ function genererTableauResultats() {
     const reponseH = userAnswersHomme[i] ? userAnswersHomme[i].answer : "-";
     const classeCSS = (reponseF === reponseH) ? 'match' : 'mismatch';
 
-    tableau += `<tr class="${classeCSS}">
-      <td>${question.question}</td>
-      <td>${reponseF}</td>
-      <td>${reponseH}</td>
-    </tr>`;
+    tableau += `
+        <tr class="${classeCSS}">
+          <td class="question-cell">${question.question}</td>
+          <td class="reponse-cell">${reponseF}</td>
+          <td class="reponse-cell">${reponseH}</td>
+        </tr>`;
   }
   
-  tableau += "</table>";
+  tableau += `
+      </tbody>
+    </table>
+  </div>`;
   return tableau;
 }
 
