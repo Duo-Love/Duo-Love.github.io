@@ -373,56 +373,42 @@ function reinitialiserQuestionnaire() {
 
   document.getElementById("questions-container").innerHTML = "";
   document.getElementById("questionnaire").className = "";
+  
+  // Nettoie aussi la page de résultat
+  const resultatContainer = document.getElementById("resultat");
+  if (resultatContainer) {
+    resultatContainer.innerHTML = "";
+  }
 }
 
 // =================== ROULETTE SEXY ===================
 const roulette = {
   canvas: null,
   ctx: null,
-  segments: ["Soft", "Coquin", "Hard"],
-  colors: ["#FFB6C1", "#FF69B4", "#C71585"],
+  segments: [],
+  colors: [],
   centerX: 250,
   centerY: 250,
   outsideR: 240,
   insideR: 80,
   currentAngle: 0,
   categoriePrecedente: null,
+  challenges: {},
   
   sons: {
     "Soft": new Audio('sons/soft.wav'),
     "Coquin": new Audio('sons/coquin.wav'),
     "Hard": new Audio('sons/hard.wav')
-  },
-
-  challenges: {
-    "Soft": [
-      "Un baiser passionné pendant 30 secondes",
-      "Un massage doux et relaxant",
-      "Regarder votre partenaire dans les yeux pendant une minute",
-      "Un compliment sincère à votre moitié",
-      "Un câlin chaleureux de 2 minutes"
-    ],
-    "Coquin": [
-      "Un strip-tease improvisé",
-      "Chuchoter un fantasme à l'oreille",
-      "Un massage des pieds coquin",
-      "Un jeu de rôle rapide",
-      "Un baiser dans le cou"
-    ],
-    "Hard": [
-      "Un défi BDSM léger (ex : menottes en tissu)",
-      "Utiliser un accessoire surprise",
-      "Un défi pimenté à l'aveugle",
-      "Un jeu de domination doux",
-      "Un moment intense avec respiration contrôlée"
-    ]
   }
 };
 
 /**
  * Initialise la roulette
  */
-function initialiserRoulette() {
+async function initialiserRoulette() {
+  // Charge les données de la roulette
+  await chargerDonneesRoulette();
+  
   roulette.canvas = document.getElementById('wheel');
   if (!roulette.canvas) return;
   
@@ -434,6 +420,29 @@ function initialiserRoulette() {
     boutonSpin.addEventListener('click', () => {
       tournerRoue();
     });
+  }
+}
+
+/**
+ * Charge les données de la roulette depuis le JSON
+ */
+async function chargerDonneesRoulette() {
+  try {
+    const response = await fetch('data/roulette.json');
+    const data = await response.json();
+    roulette.segments = data.segments;
+    roulette.colors = data.colors;
+    roulette.challenges = data.challenges;
+  } catch (error) {
+    console.error('Erreur lors du chargement des données roulette:', error);
+    // Données de fallback
+    roulette.segments = ["Soft", "Coquin", "Hard"];
+    roulette.colors = ["#FFB6C1", "#FF69B4", "#C71585"];
+    roulette.challenges = {
+      "Soft": ["Un baiser passionné pendant 30 secondes"],
+      "Coquin": ["Un strip-tease improvisé"],
+      "Hard": ["Un défi BDSM léger"]
+    };
   }
 }
 
@@ -553,10 +562,20 @@ function afficherResultatRoulette() {
   const defiAleatoire = defis[Math.floor(Math.random() * defis.length)];
 
   const resultatDiv = document.getElementById("roulette-resultat");
-  resultatDiv.innerHTML = `
-    <strong>🎯 Niveau :</strong> ${niveau}<br>
-    <strong>💋 Défi :</strong> ${defiAleatoire}
-  `;
+  
+  // Animation feu d'artifice
+  resultatDiv.classList.add('fireworks-animation');
+  
+  setTimeout(() => {
+    resultatDiv.innerHTML = `
+      <div class="defi-content">
+        <strong>🎯 Niveau :</strong> ${niveau}<br>
+        <strong>💋 Défi :</strong> ${defiAleatoire}
+        <button onclick="afficher('menu')" class="retour-menu-btn">Retour au menu</button>
+      </div>
+    `;
+    resultatDiv.classList.remove('fireworks-animation');
+  }, 1000);
 
   // Son final
   jouerSonCategorie(niveau);
@@ -573,4 +592,405 @@ function dessinerFrame() {
 // =================== INITIALISATION ===================
 document.addEventListener('DOMContentLoaded', function() {
   initialiserRoulette();
+  initialiserMiniJeux();
+});
+
+// =================== MINI JEUX ===================
+const miniJeux = {
+  demineur: {
+    grille: [],
+    taille: 8,
+    mines: 10,
+    revele: 0,
+    gameOver: false,
+    firstClick: true
+  },
+  candyCrush: {
+    grille: [],
+    taille: 8,
+    score: 0,
+    selectedCandy: null,
+    candyTypes: ['💋', '💄', '👠', '🌹', '💎', '🔥']
+  },
+  ticTacToe: {
+    grille: Array(9).fill(''),
+    joueurActuel: '💋',
+    gameOver: false
+  }
+};
+
+/**
+ * Initialise les mini-jeux
+ */
+function initialiserMiniJeux() {
+  // Les jeux seront initialisés quand on accède à leur page
+}
+
+/**
+ * Affiche la page mini-jeux
+ */
+function afficherMiniJeux() {
+  masquerToutesLesPages();
+  document.getElementById('mini-jeux').style.display = "block";
+}
+
+/**
+ * Lance un mini-jeu spécifique
+ */
+function lancerMiniJeu(jeu) {
+  masquerToutesLesPages();
+  document.getElementById(`jeu-${jeu}`).style.display = "block";
+  
+  switch(jeu) {
+    case 'demineur':
+      initialiserDemineur();
+      break;
+    case 'candy':
+      initialiserCandyCrush();
+      break;
+    case 'tictactoe':
+      initialiserTicTacToe();
+      break;
+  }
+}
+
+// =================== DÉMINEUR SEXY ===================
+function initialiserDemineur() {
+  const jeu = miniJeux.demineur;
+  jeu.grille = [];
+  jeu.revele = 0;
+  jeu.gameOver = false;
+  jeu.firstClick = true;
+  
+  // Crée la grille
+  for (let i = 0; i < jeu.taille * jeu.taille; i++) {
+    jeu.grille.push({
+      mine: false,
+      revele: false,
+      flag: false,
+      adjacent: 0
+    });
+  }
+  
+  afficherGrilleDemineur();
+}
+
+function placerMines(premierClick) {
+  const jeu = miniJeux.demineur;
+  let minesPlacees = 0;
+  
+  while (minesPlacees < jeu.mines) {
+    const index = Math.floor(Math.random() * jeu.grille.length);
+    if (!jeu.grille[index].mine && index !== premierClick) {
+      jeu.grille[index].mine = true;
+      minesPlacees++;
+    }
+  }
+  
+  // Calcule les nombres adjacents
+  for (let i = 0; i < jeu.grille.length; i++) {
+    if (!jeu.grille[i].mine) {
+      jeu.grille[i].adjacent = compterMinesAdjacentes(i);
+    }
+  }
+}
+
+function compterMinesAdjacentes(index) {
+  const jeu = miniJeux.demineur;
+  const row = Math.floor(index / jeu.taille);
+  const col = index % jeu.taille;
+  let count = 0;
+  
+  for (let r = -1; r <= 1; r++) {
+    for (let c = -1; c <= 1; c++) {
+      const newRow = row + r;
+      const newCol = col + c;
+      if (newRow >= 0 && newRow < jeu.taille && newCol >= 0 && newCol < jeu.taille) {
+        const newIndex = newRow * jeu.taille + newCol;
+        if (jeu.grille[newIndex].mine) count++;
+      }
+    }
+  }
+  return count;
+}
+
+function afficherGrilleDemineur() {
+  const container = document.getElementById('demineur-grille');
+  container.innerHTML = '';
+  
+  miniJeux.demineur.grille.forEach((cellule, index) => {
+    const div = document.createElement('div');
+    div.className = 'demineur-cell';
+    div.onclick = () => revelerCellule(index);
+    div.oncontextmenu = (e) => {
+      e.preventDefault();
+      toggleFlag(index);
+    };
+    
+    if (cellule.revele) {
+      div.classList.add('revealed');
+      if (cellule.mine) {
+        div.textContent = '💣';
+        div.classList.add('mine');
+      } else if (cellule.adjacent > 0) {
+        div.textContent = cellule.adjacent;
+      }
+    } else if (cellule.flag) {
+      div.textContent = '🚩';
+      div.classList.add('flagged');
+    }
+    
+    container.appendChild(div);
+  });
+}
+
+function revelerCellule(index) {
+  const jeu = miniJeux.demineur;
+  if (jeu.gameOver || jeu.grille[index].revele || jeu.grille[index].flag) return;
+  
+  if (jeu.firstClick) {
+    placerMines(index);
+    jeu.firstClick = false;
+  }
+  
+  jeu.grille[index].revele = true;
+  jeu.revele++;
+  
+  if (jeu.grille[index].mine) {
+    jeu.gameOver = true;
+    afficherMessage('💥 Boom! Vous avez touché une bombe sexy!');
+  } else if (jeu.revele === jeu.grille.length - jeu.mines) {
+    jeu.gameOver = true;
+    afficherMessage('🎉 Victoire! Vous êtes un expert du démineur sexy!');
+  }
+  
+  // Auto-révélation des cellules vides
+  if (jeu.grille[index].adjacent === 0 && !jeu.grille[index].mine) {
+    revelerCellulesAdjacentes(index);
+  }
+  
+  afficherGrilleDemineur();
+}
+
+function revelerCellulesAdjacentes(index) {
+  const jeu = miniJeux.demineur;
+  const row = Math.floor(index / jeu.taille);
+  const col = index % jeu.taille;
+  
+  for (let r = -1; r <= 1; r++) {
+    for (let c = -1; c <= 1; c++) {
+      const newRow = row + r;
+      const newCol = col + c;
+      if (newRow >= 0 && newRow < jeu.taille && newCol >= 0 && newCol < jeu.taille) {
+        const newIndex = newRow * jeu.taille + newCol;
+        if (!jeu.grille[newIndex].revele && !jeu.grille[newIndex].flag) {
+          revelerCellule(newIndex);
+        }
+      }
+    }
+  }
+}
+
+function toggleFlag(index) {
+  const jeu = miniJeux.demineur;
+  if (jeu.gameOver || jeu.grille[index].revele) return;
+  
+  jeu.grille[index].flag = !jeu.grille[index].flag;
+  afficherGrilleDemineur();
+}
+
+// =================== CANDY CRUSH SEXY ===================
+function initialiserCandyCrush() {
+  const jeu = miniJeux.candyCrush;
+  jeu.grille = [];
+  jeu.score = 0;
+  jeu.selectedCandy = null;
+  
+  // Crée la grille
+  for (let i = 0; i < jeu.taille * jeu.taille; i++) {
+    jeu.grille.push(jeu.candyTypes[Math.floor(Math.random() * jeu.candyTypes.length)]);
+  }
+  
+  afficherGrilleCandy();
+  document.getElementById('candy-score').textContent = jeu.score;
+}
+
+function afficherGrilleCandy() {
+  const container = document.getElementById('candy-grille');
+  container.innerHTML = '';
+  
+  miniJeux.candyCrush.grille.forEach((candy, index) => {
+    const div = document.createElement('div');
+    div.className = 'candy-cell';
+    div.textContent = candy;
+    div.onclick = () => selectionnerCandy(index);
+    
+    if (miniJeux.candyCrush.selectedCandy === index) {
+      div.classList.add('selected');
+    }
+    
+    container.appendChild(div);
+  });
+}
+
+function selectionnerCandy(index) {
+  const jeu = miniJeux.candyCrush;
+  
+  if (jeu.selectedCandy === null) {
+    jeu.selectedCandy = index;
+  } else if (jeu.selectedCandy === index) {
+    jeu.selectedCandy = null;
+  } else {
+    // Vérifie si les candies sont adjacents
+    if (sontAdjacents(jeu.selectedCandy, index)) {
+      echangerCandies(jeu.selectedCandy, index);
+    }
+    jeu.selectedCandy = null;
+  }
+  
+  afficherGrilleCandy();
+}
+
+function sontAdjacents(index1, index2) {
+  const taille = miniJeux.candyCrush.taille;
+  const row1 = Math.floor(index1 / taille);
+  const col1 = index1 % taille;
+  const row2 = Math.floor(index2 / taille);
+  const col2 = index2 % taille;
+  
+  return Math.abs(row1 - row2) + Math.abs(col1 - col2) === 1;
+}
+
+function echangerCandies(index1, index2) {
+  const jeu = miniJeux.candyCrush;
+  const temp = jeu.grille[index1];
+  jeu.grille[index1] = jeu.grille[index2];
+  jeu.grille[index2] = temp;
+  
+  // Vérifie les matches
+  const matches = trouverMatches();
+  if (matches.length > 0) {
+    supprimerMatches(matches);
+    jeu.score += matches.length * 10;
+    document.getElementById('candy-score').textContent = jeu.score;
+    jouerSonClick();
+  } else {
+    // Annule l'échange si pas de match
+    jeu.grille[index2] = jeu.grille[index1];
+    jeu.grille[index1] = temp;
+  }
+}
+
+function trouverMatches() {
+  const jeu = miniJeux.candyCrush;
+  const matches = [];
+  
+  // Vérifie les lignes
+  for (let row = 0; row < jeu.taille; row++) {
+    let count = 1;
+    for (let col = 1; col < jeu.taille; col++) {
+      const current = row * jeu.taille + col;
+      const previous = row * jeu.taille + (col - 1);
+      
+      if (jeu.grille[current] === jeu.grille[previous]) {
+        count++;
+      } else {
+        if (count >= 3) {
+          for (let i = 0; i < count; i++) {
+            matches.push(row * jeu.taille + (col - 1 - i));
+          }
+        }
+        count = 1;
+      }
+    }
+    if (count >= 3) {
+      for (let i = 0; i < count; i++) {
+        matches.push(row * jeu.taille + (jeu.taille - 1 - i));
+      }
+    }
+  }
+  
+  return [...new Set(matches)];
+}
+
+function supprimerMatches(matches) {
+  const jeu = miniJeux.candyCrush;
+  matches.forEach(index => {
+    jeu.grille[index] = jeu.candyTypes[Math.floor(Math.random() * jeu.candyTypes.length)];
+  });
+  
+  setTimeout(() => {
+    afficherGrilleCandy();
+  }, 300);
+}
+
+// =================== TIC-TAC-TOE SEXY ===================
+function initialiserTicTacToe() {
+  const jeu = miniJeux.ticTacToe;
+  jeu.grille = Array(9).fill('');
+  jeu.joueurActuel = '💋';
+  jeu.gameOver = false;
+  
+  afficherGrilleTicTacToe();
+  document.getElementById('tictactoe-joueur').textContent = jeu.joueurActuel;
+}
+
+function afficherGrilleTicTacToe() {
+  const container = document.getElementById('tictactoe-grille');
+  container.innerHTML = '';
+  
+  miniJeux.ticTacToe.grille.forEach((cellule, index) => {
+    const div = document.createElement('div');
+    div.className = 'tictactoe-cell';
+    div.textContent = cellule;
+    div.onclick = () => jouerTicTacToe(index);
+    container.appendChild(div);
+  });
+}
+
+function jouerTicTacToe(index) {
+  const jeu = miniJeux.ticTacToe;
+  
+  if (jeu.gameOver || jeu.grille[index] !== '') return;
+  
+  jeu.grille[index] = jeu.joueurActuel;
+  jouerSonClick();
+  
+  if (verifierVictoire()) {
+    jeu.gameOver = true;
+    afficherMessage(`🎉 ${jeu.joueurActuel} a gagné!`);
+  } else if (jeu.grille.every(cell => cell !== '')) {
+    jeu.gameOver = true;
+    afficherMessage('🤝 Match nul!');
+  } else {
+    jeu.joueurActuel = jeu.joueurActuel === '💋' ? '🔥' : '💋';
+    document.getElementById('tictactoe-joueur').textContent = jeu.joueurActuel;
+  }
+  
+  afficherGrilleTicTacToe();
+}
+
+function verifierVictoire() {
+  const grille = miniJeux.ticTacToe.grille;
+  const lignesGagnantes = [
+    [0, 1, 2], [3, 4, 5], [6, 7, 8], // lignes
+    [0, 3, 6], [1, 4, 7], [2, 5, 8], // colonnes
+    [0, 4, 8], [2, 4, 6] // diagonales
+  ];
+  
+  return lignesGagnantes.some(ligne => {
+    const [a, b, c] = ligne;
+    return grille[a] && grille[a] === grille[b] && grille[a] === grille[c];
+  });
+}
+
+function afficherMessage(message) {
+  const messageDiv = document.createElement('div');
+  messageDiv.className = 'game-message';
+  messageDiv.textContent = message;
+  document.body.appendChild(messageDiv);
+  
+  setTimeout(() => {
+    document.body.removeChild(messageDiv);
+  }, 3000);
 });
