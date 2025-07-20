@@ -251,34 +251,92 @@ button {
 }
 
 /* Tableau de compatibilité */
-#resultat table {
+.tableau-container {
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.tableau-mobile {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
   font-size: 16px;
+  min-width: 100%;
+  background-color: rgba(0,0,0,0.8);
 }
 
-#resultat th, #resultat td {
-  padding: 12px;
+.tableau-mobile th {
+  background-color: #2c2c2c;
+  color: #f48fb1;
+  padding: 15px 8px;
   text-align: center;
-  border: 1px solid #ddd;
-  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  border-bottom: 2px solid #f48fb1;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
-#resultat tr:nth-child(even) {
-  background-color: rgba(255, 255, 255, 0.05);
+.tableau-mobile td {
+  padding: 12px 8px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  color: white;
+  font-size: 13px;
+}
+
+.question-cell {
+  text-align: left !important;
+  font-weight: 500;
+  max-width: 200px;
+  word-wrap: break-word;
+}
+
+.reponse-cell {
+  font-weight: 600;
+  min-width: 80px;
 }
 
 /* Bonne réponse (match) : vert pâle */
-#resultat tr.match {
-  background-color: #2e7d32; /* vert foncé */
+.tableau-mobile tr.match {
+  background-color: rgba(46, 125, 50, 0.8);
   color: #e8f5e9;
 }
 
 /* Mauvaise réponse (différente) : rouge pâle */
-#resultat tr.mismatch {
-  background-color: #c62828; /* rouge foncé */
+.tableau-mobile tr.mismatch {
+  background-color: rgba(198, 40, 40, 0.8);
   color: #ffebee;
+}
+
+/* Alternance des lignes pour meilleure lisibilité */
+.tableau-mobile tbody tr:nth-child(even):not(.match):not(.mismatch) {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Responsive pour très petits écrans */
+@media (max-width: 480px) {
+  .tableau-mobile {
+    font-size: 12px;
+  }
+  
+  .tableau-mobile th,
+  .tableau-mobile td {
+    padding: 8px 4px;
+  }
+  
+  .question-cell {
+    max-width: 150px;
+    font-size: 11px;
+  }
+  
+  .reponse-cell {
+    font-size: 10px;
+    min-width: 60px;
+  }
 }
 
 /* Pourcentage de compatibilité */
