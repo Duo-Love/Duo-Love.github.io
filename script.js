@@ -8,6 +8,21 @@ let userAnswersHomme = [];
 // Son sexy pour la transition
 const sonOhYes = new Audio('sons/oh-yes.wav');
 
+// Sons pour les boutons du questionnaire (style Candy Crush)
+const sonsClick = [
+  new Audio('sons/click1.wav'),
+  new Audio('sons/click2.wav'),
+  new Audio('sons/click3.wav')
+];
+
+/**
+ * Joue un son de clic aléatoire pour les boutons du questionnaire
+ */
+function jouerSonClick() {
+  const sonAleatoire = sonsClick[Math.floor(Math.random() * sonsClick.length)];
+  sonAleatoire.currentTime = 0;
+  sonAleatoire.play().catch(e => console.log('Son non disponible'));
+}
 /**
  * Affiche la page demandée et effectue des actions spécifiques selon la page
  * @param {string} id - id de la page à afficher
@@ -192,13 +207,20 @@ function afficherContenuQuestion(container, messageDiv) {
     btn.classList.add("reponse-btn");
 
     btn.onclick = () => {
+      // Joue le son de clic style Candy Crush
+      jouerSonClick();
+      
       if (phase === 'femme') {
         userAnswersFemme.push({ questionId: question.id, answer: option });
       } else {
         userAnswersHomme.push({ questionId: question.id, answer: option });
       }
-      currentQuestionIndex++;
-      afficherQuestion();
+      
+      // Délai pour laisser l'animation du bouton se terminer
+      setTimeout(() => {
+        currentQuestionIndex++;
+        afficherQuestion();
+      }, 200);
     };
     container.appendChild(btn);
   });

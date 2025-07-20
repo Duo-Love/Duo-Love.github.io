@@ -73,32 +73,8 @@ button {
   box-shadow: 0 0 10px transparent;
   background: linear-gradient(135deg, #f48fb1, #ec407a);
   position: relative;
-  transform: translateY(0px);
 }
 
-/* Effet de bouton poussoir - état enfoncé */
-button:active {
-  transform: translateY(4px) scale(0.98);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3), inset 0 2px 4px rgba(0,0,0,0.2);
-  transition: all 0.1s ease;
-}
-
-/* Animation de retour du bouton */
-button:not(:active) {
-  animation: buttonReturn 0.3s ease-out;
-}
-
-@keyframes buttonReturn {
-  0% {
-    transform: translateY(4px) scale(0.98);
-  }
-  50% {
-    transform: translateY(-1px) scale(1.02);
-  }
-  100% {
-    transform: translateY(0px) scale(1);
-  }
-}
 
 /* Bouton GO spécial avec effet glamour */
 #accueil button {
@@ -111,6 +87,31 @@ button:not(:active) {
   font-weight: 600;
   position: relative;
   overflow: hidden;
+  transform: translateY(0px);
+}
+
+/* Effet de bouton poussoir pour le bouton GO */
+#accueil button:active {
+  transform: translateY(6px) scale(1.02);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.4), inset 0 3px 6px rgba(0,0,0,0.3);
+  transition: all 0.1s ease;
+}
+
+/* Animation de retour pour le bouton GO */
+#accueil button:not(:active) {
+  animation: buttonReturnGO 0.4s ease-out;
+}
+
+@keyframes buttonReturnGO {
+  0% {
+    transform: translateY(6px) scale(1.02);
+  }
+  50% {
+    transform: translateY(-2px) scale(1.08);
+  }
+  100% {
+    transform: translateY(0px) scale(1);
+  }
 }
 
 #accueil button::before {
@@ -134,11 +135,6 @@ button:not(:active) {
   transform: translateY(-2px) scale(1.08);
 }
 
-#accueil button:active {
-  transform: translateY(6px) scale(1.02);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.4), inset 0 3px 6px rgba(0,0,0,0.3);
-}
-
 /* Hover général sur les boutons */
 button:hover {
   box-shadow: 0 0 25px #f48fb1;
@@ -155,6 +151,33 @@ button:hover {
   margin-right: auto;
 }
 
+/* Boutons du menu avec effet poussoir */
+#menu button {
+  transform: translateY(0px);
+}
+
+#menu button:active {
+  transform: translateY(4px) scale(0.98);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3), inset 0 2px 4px rgba(0,0,0,0.2);
+  transition: all 0.1s ease;
+}
+
+#menu button:not(:active) {
+  animation: buttonReturnMenu 0.3s ease-out;
+}
+
+@keyframes buttonReturnMenu {
+  0% {
+    transform: translateY(4px) scale(0.98);
+  }
+  50% {
+    transform: translateY(-1px) scale(1.02);
+  }
+  100% {
+    transform: translateY(0px) scale(1);
+  }
+}
+
 /* =================== Réponses ===================== */
 .reponse-btn {
   padding: 12px 18px;
@@ -166,13 +189,29 @@ button:hover {
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
-  transform: translateY(0px);
 }
 
-/* Effet poussoir spécifique aux boutons de réponse */
+/* Effet poussoir spécifique aux boutons de réponse avec son */
 .reponse-btn:active {
   transform: translateY(3px) scale(0.97);
   box-shadow: 0 2px 6px rgba(0,0,0,0.4), inset 0 2px 4px rgba(0,0,0,0.3);
+  transition: all 0.1s ease;
+}
+
+.reponse-btn:not(:active) {
+  animation: buttonReturnReponse 0.3s ease-out;
+}
+
+@keyframes buttonReturnReponse {
+  0% {
+    transform: translateY(3px) scale(0.97);
+  }
+  50% {
+    transform: translateY(-1px) scale(1.02);
+  }
+  100% {
+    transform: translateY(0px) scale(1);
+  }
 }
 
 /* ✅ Couleurs dynamiques en fonction de la phase femme/homme via #questionnaire */
