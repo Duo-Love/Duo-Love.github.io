@@ -32,12 +32,12 @@ function afficher(id) {
     setTimeout(() => {
       accueil.style.transform = "translateX(-100%)";
       menu.style.transform = "translateX(0%)";
-    }, 100);
+    }, 150);
     
     // Cache l'accueil après l'animation
     setTimeout(() => {
       accueil.style.display = "none";
-    }, 800);
+    }, 1200);
     
     return;
   }
@@ -123,7 +123,35 @@ function afficherQuestion() {
   afficherTitrePhase(); // Met à jour le titre selon la phase
   const container = document.getElementById("questions-container");
   const messageDiv = document.getElementById("message-transition");
-  container.innerHTML = "";
+  
+  // Animation de sortie pour la question précédente
+  container.classList.add('question-exit');
+  
+  setTimeout(() => {
+    container.innerHTML = "";
+    container.classList.remove('question-exit');
+    container.classList.add('question-enter');
+    
+    // Contenu de la nouvelle question
+    afficherContenuQuestion(container, messageDiv);
+    
+    // Animation d'entrée
+    setTimeout(() => {
+      container.classList.remove('question-enter');
+      container.classList.add('question-enter-active');
+    }, 50);
+    
+    setTimeout(() => {
+      container.classList.remove('question-enter-active');
+    }, 650);
+    
+  }, 300);
+}
+
+/**
+ * Affiche le contenu de la question (séparé pour la gestion des animations)
+ */
+function afficherContenuQuestion(container, messageDiv) {
   if (messageDiv) messageDiv.innerHTML = "";
 
   // Si on a affiché toutes les questions de la phase en cours

@@ -68,10 +68,36 @@ button {
   cursor: pointer;
   font-size: 16px;
   margin: 5px;
-  transition: background-color 0.3s ease, box-shadow 0.4s ease, transform 0.3s ease;
+  transition: all 0.3s ease;
   color: white;
   box-shadow: 0 0 10px transparent;
   background: linear-gradient(135deg, #f48fb1, #ec407a);
+  position: relative;
+  transform: translateY(0px);
+}
+
+/* Effet de bouton poussoir - état enfoncé */
+button:active {
+  transform: translateY(4px) scale(0.98);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3), inset 0 2px 4px rgba(0,0,0,0.2);
+  transition: all 0.1s ease;
+}
+
+/* Animation de retour du bouton */
+button:not(:active) {
+  animation: buttonReturn 0.3s ease-out;
+}
+
+@keyframes buttonReturn {
+  0% {
+    transform: translateY(4px) scale(0.98);
+  }
+  50% {
+    transform: translateY(-1px) scale(1.02);
+  }
+  100% {
+    transform: translateY(0px) scale(1);
+  }
 }
 
 /* Bouton GO spécial avec effet glamour */
@@ -105,13 +131,18 @@ button {
 #accueil button:hover {
   background: linear-gradient(135deg, #ff8fab, #d63384);
   box-shadow: 0 0 30px #ff6b9d, 0 0 60px rgba(255, 107, 157, 0.4);
-  transform: scale(1.08);
+  transform: translateY(-2px) scale(1.08);
+}
+
+#accueil button:active {
+  transform: translateY(6px) scale(1.02);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.4), inset 0 3px 6px rgba(0,0,0,0.3);
 }
 
 /* Hover général sur les boutons */
 button:hover {
   box-shadow: 0 0 25px #f48fb1;
-  transform: scale(1.05);
+  transform: translateY(-2px) scale(1.05);
 }
 
 /* Espacement vertical des boutons dans le menu */
@@ -133,7 +164,15 @@ button:hover {
   margin: 8px;
   color: white;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
+  position: relative;
+  transform: translateY(0px);
+}
+
+/* Effet poussoir spécifique aux boutons de réponse */
+.reponse-btn:active {
+  transform: translateY(3px) scale(0.97);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4), inset 0 2px 4px rgba(0,0,0,0.3);
 }
 
 /* ✅ Couleurs dynamiques en fonction de la phase femme/homme via #questionnaire */
@@ -146,6 +185,7 @@ button:hover {
 #questionnaire.femme .reponse-btn:hover {
   background-color: #c2185b;
   box-shadow: 0 0 25px #c2185b;
+  transform: translateY(-2px) scale(1.03);
 }
 
 #questionnaire.homme .reponse-btn {
@@ -156,6 +196,30 @@ button:hover {
 #questionnaire.homme .reponse-btn:hover {
   background-color: #1976d2;
   box-shadow: 0 0 25px #1976d2;
+  transform: translateY(-2px) scale(1.03);
+}
+
+/* Conteneur des questions avec transition */
+#questions-container {
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Classes pour les transitions de questions */
+.question-exit {
+  opacity: 0;
+  transform: translateX(-100%);
+}
+
+.question-enter {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+.question-enter-active {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 /* Tableau de compatibilité */
