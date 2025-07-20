@@ -88,7 +88,7 @@ function lancerMiniJeu(type) {
 
 // =================== QUESTIONNAIRE ===================
 function chargerQuestions() {
-  fetch('data/questions.json')
+  fetch('./data/questions.json')
     .then(response => response.json())
     .then(data => {
       questions = data;
@@ -100,6 +100,13 @@ function chargerQuestions() {
     })
     .catch(error => {
       console.error('Erreur lors du chargement des questions:', error);
+      // Fallback avec données par défaut
+      questions = [
+        { id: 1, question: "Préférez-vous dominer ou être dominé ?", options: ["Dominer", "Être dominé", "Les deux"] },
+        { id: 2, question: "Quel type de préliminaires préférez-vous ?", options: ["Oral", "Caresses", "Massages"] },
+        { id: 3, question: "Quel est votre lieu préféré pour faire l'amour ?", options: ["Lit", "Douche", "Endroit insolite"] }
+      ];
+      afficherQuestion();
     });
 }
 
@@ -195,7 +202,7 @@ let angle = 0;
 let rouletteAnimation;
 
 function chargerRoulette() {
-  fetch('data/roulette.json')
+  fetch('./data/roulette.json')
     .then(res => res.json())
     .then(data => {
       rouletteData = data;
@@ -205,6 +212,18 @@ function chargerRoulette() {
     })
     .catch(error => {
       console.error('Erreur lors du chargement de la roulette:', error);
+      // Fallback avec données par défaut
+      rouletteGages = [
+        { type: "doux", texte: "Fais un massage sensuel à ton/ta partenaire pendant 3 minutes." },
+        { type: "coquin", texte: "Embrasse ton/ta partenaire lentement pendant 1 minute, sans les mains." },
+        { type: "osé", texte: "Retire un vêtement de ton choix... doucement." },
+        { type: "jeu", texte: "Utilisez un glaçon pour explorer le corps de l'autre." },
+        { type: "jeu", texte: "Lèche une partie du corps de ton/ta partenaire (hors zone intime)." },
+        { type: "coquin", texte: "Lis un fantasme à voix haute que tu aimerais essayer." },
+        { type: "doux", texte: "Fais un compliment sexy et sincère à ton/ta partenaire." },
+        { type: "osé", texte: "Utilisez uniquement vos lèvres pendant 60 secondes..." }
+      ];
+      drawWheel();
     });
 }
 
