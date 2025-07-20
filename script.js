@@ -5,14 +5,48 @@ let phase = 'femme'; // Phase actuelle : 'femme' ou 'homme'
 let userAnswersFemme = [];
 let userAnswersHomme = [];
 
+// Son sexy pour la transition
+const sonOhYes = new Audio('sons/oh-yes.wav');
+
 /**
  * Affiche la page demandée et effectue des actions spécifiques selon la page
  * @param {string} id - id de la page à afficher
  */
 function afficher(id) {
-  // Cache toutes les pages
-  document.querySelectorAll(".page").forEach(div => div.style.display = "none");
-  // Affiche la page demandée
+  // Si on va vers le menu depuis l'accueil, jouer le son et faire la transition
+  if (id === "menu") {
+    // Joue le son sexy
+    sonOhYes.currentTime = 0;
+    sonOhYes.play();
+    
+    // Transition slide avec animation
+    const accueil = document.getElementById("accueil");
+    const menu = document.getElementById("menu");
+    
+    // Prépare l'animation
+    accueil.style.transform = "translateX(0%)";
+    menu.style.display = "block";
+    menu.style.transform = "translateX(100%)";
+    
+    // Lance l'animation après un petit délai
+    setTimeout(() => {
+      accueil.style.transform = "translateX(-100%)";
+      menu.style.transform = "translateX(0%)";
+    }, 100);
+    
+    // Cache l'accueil après l'animation
+    setTimeout(() => {
+      accueil.style.display = "none";
+    }, 800);
+    
+    return;
+  }
+  
+  // Comportement normal pour les autres pages
+  document.querySelectorAll(".page").forEach(div => {
+    div.style.display = "none";
+    div.style.transform = "translateX(0%)"; // Reset des transformations
+  });
   document.getElementById(id).style.display = "block";
 
   if (id === "questionnaire") {
