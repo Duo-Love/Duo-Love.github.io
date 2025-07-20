@@ -46,8 +46,6 @@
     <div id="roulette-resultat" class="defi-box"></div>
   </div>
 
-
-
   <!-- Page Action ou Vérité -->
   <div id="action-verite" class="page" style="display:none;">
     <h2>Action ou Vérité</h2>
@@ -60,13 +58,7 @@
     <h2>🎮 Mini Jeux Sexy</h2>
     <div class="mini-jeux-grid">
       <button onclick="lancerMiniJeu('demineur')" class="mini-jeu-btn">
-        💣 Démineur Sexy
-      </button>
-      <button onclick="lancerMiniJeu('candy')" class="mini-jeu-btn">
-        💋 Candy Crush Sexy
-      </button>
-      <button onclick="lancerMiniJeu('tictactoe')" class="mini-jeu-btn">
-        🔥 Tic-Tac-Toe Sexy
+        🦠 Démineur Sexy (2 Joueurs)
       </button>
     </div>
     <button onclick="afficher('menu')">Retour au menu</button>
@@ -74,31 +66,18 @@
 
   <!-- Jeu Démineur -->
   <div id="jeu-demineur" class="page" style="display:none;">
-    <h2>💣 Démineur Sexy</h2>
+    <h2>🦠 Démineur Sexy - Duel IST</h2>
+    <div id="demineur-info"></div>
     <div id="demineur-grille" class="demineur-grid"></div>
-    <button onclick="initialiserDemineur()">Nouvelle partie</button>
-    <button onclick="afficherMiniJeux()">Retour aux jeux</button>
+    <div id="demineur-resultat" class="demineur-result-container"></div>
+    <div class="demineur-controls">
+      <button onclick="initialiserDemineurDeuxJoueurs()">Nouvelle partie</button>
+      <button onclick="afficherMiniJeux()">Retour aux jeux</button>
+    </div>
   </div>
 
-  <!-- Jeu Candy Crush -->
-  <div id="jeu-candy" class="page" style="display:none;">
-    <h2>💋 Candy Crush Sexy</h2>
-    <div class="candy-info">Score: <span id="candy-score">0</span></div>
-    <div id="candy-grille" class="candy-grid"></div>
-    <button onclick="initialiserCandyCrush()">Nouvelle partie</button>
-    <button onclick="afficherMiniJeux()">Retour aux jeux</button>
-  </div>
-
-  <!-- Jeu Tic-Tac-Toe -->
-  <div id="jeu-tictactoe" class="page" style="display:none;">
-    <h2>🔥 Tic-Tac-Toe Sexy</h2>
-    <div class="tictactoe-info">Joueur actuel: <span id="tictactoe-joueur">💋</span></div>
-    <div id="tictactoe-grille" class="tictactoe-grid"></div>
-    <button onclick="initialiserTicTacToe()">Nouvelle partie</button>
-    <button onclick="afficherMiniJeux()">Retour aux jeux</button>
-  </div>
-
-  <!-- Script principal -->
+  <!-- Scripts -->
   <script src="script.js"></script>
+  <script src="demineur.js"></script>
 </body>
 </html>
